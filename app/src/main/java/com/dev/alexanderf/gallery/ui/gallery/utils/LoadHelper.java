@@ -24,12 +24,9 @@ public class LoadHelper {
     private LoadExecutor executor;
     private LoadPublicResourcesTask task;
 
-    private int offset = 0;
     private int page = 0;
     private boolean endIsReached = false;
     private boolean onRestoreLoad = false;
-    public int itemCount;
-
 
     private LoadHelper() {
         executor = new LoadExecutor();
@@ -58,7 +55,7 @@ public class LoadHelper {
         }
 
         if (!endIsReached){
-            offset = page * LOAD_LIMIT;
+            int offset = page * LOAD_LIMIT;
             task = new LoadPublicResourcesTask(activity, offset, LOAD_LIMIT);
             task.executeOnExecutor(executor);
             page++;
@@ -92,10 +89,7 @@ public class LoadHelper {
                 endIsReached = savedInstanceState.getBoolean(BUNDLE_KEY_END);
             }
         }
-
-
     }
-
 
     private static class LoadExecutor extends ThreadPoolExecutor {
         private LoadExecutor() {
