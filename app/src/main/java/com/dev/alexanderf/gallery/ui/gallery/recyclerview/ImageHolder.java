@@ -14,7 +14,7 @@ import com.dev.alexanderf.gallery.R;
  * Created by AF.
  */
 public class ImageHolder extends RecyclerView.ViewHolder {
-    public ImageView imageView;
+    public SquareImageView imageView;
     public View mainLayout;
 
 

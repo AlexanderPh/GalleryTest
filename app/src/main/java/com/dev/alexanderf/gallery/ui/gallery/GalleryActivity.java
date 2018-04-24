@@ -1,5 +1,6 @@
 package com.dev.alexanderf.gallery.ui.gallery;
 
+import android.content.res.Configuration;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,7 +49,11 @@ public class GalleryActivity extends AppCompatActivity {
 
     private void initUI() {
         recyclerView = findViewById(R.id.recyclerview_gallery);
-        gridLayoutManager = new GridLayoutManager(this, 3);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            gridLayoutManager = new GridLayoutManager(this, 5);
+        }else {
+            gridLayoutManager = new GridLayoutManager(this, 3);
+        }
         galleryAdapter = new GalleryAdapter(this);
         recyclerView.setAdapter(galleryAdapter);
         recyclerView.setLayoutManager(gridLayoutManager);
