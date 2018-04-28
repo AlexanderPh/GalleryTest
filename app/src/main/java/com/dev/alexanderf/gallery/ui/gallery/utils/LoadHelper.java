@@ -15,8 +15,7 @@ import java.util.concurrent.TimeUnit;
  * Created by AF.
  */
 public class LoadHelper {
-    private static final String BUNDLE_KEY_PAGE = "offset_key";
-    private static final String BUNDLE_KEY_END = "end_key";
+
     public static final int LOAD_LIMIT  = 15;
 
     private static LoadHelper instance = null;
@@ -26,7 +25,6 @@ public class LoadHelper {
 
     private int page = 0;
     private boolean endIsReached = false;
-    private boolean onRestoreLoad = false;
 
     private LoadHelper() {
         executor = new LoadExecutor();
@@ -47,13 +45,6 @@ public class LoadHelper {
         if (task != null){
             task.cancel(true);
         }
-
-        if (onRestoreLoad) {
-            task = new LoadPublicResourcesTask(activity, 0, page * LOAD_LIMIT);
-            task.executeOnExecutor(executor);
-            onRestoreLoad = false;
-        }
-
         if (!endIsReached){
             int offset = page * LOAD_LIMIT;
             task = new LoadPublicResourcesTask(activity, offset, LOAD_LIMIT);
@@ -70,26 +61,11 @@ public class LoadHelper {
         endIsReached = true;
     }
 
-    public void onSaveInstanceState(Bundle outState) {
-        if (outState != null) {
-            outState.putInt(BUNDLE_KEY_PAGE, page);
-            outState.putBoolean(BUNDLE_KEY_END, endIsReached);
-        }
+    public boolean isEndIsReached() {
+        return endIsReached;
     }
 
 
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState != null){
-            if (savedInstanceState.containsKey(BUNDLE_KEY_PAGE)){
-                page = savedInstanceState.getInt(BUNDLE_KEY_PAGE);
-                onRestoreLoad = true;
-            }
-
-            if (savedInstanceState.containsKey(BUNDLE_KEY_END)){
-                endIsReached = savedInstanceState.getBoolean(BUNDLE_KEY_END);
-            }
-        }
-    }
 
     private static class LoadExecutor extends ThreadPoolExecutor {
         private LoadExecutor() {
@@ -109,7 +85,6 @@ public class LoadHelper {
             task.cancel(true);
         }
         task = null;
-        endIsReached = false;
     }
 
 }

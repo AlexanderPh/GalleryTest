@@ -20,7 +20,9 @@ public class GalleryItem implements Parcelable {
     private String media_type;
     private long size;
 
+
     public GalleryItem() {
+
     }
 
     public GalleryItem(String name, String preview, String file, String created, String modified, String path, String md5, String type, String mime_type, String media_type, long size) {
@@ -175,5 +177,6 @@ public class GalleryItem implements Parcelable {
     public static Creator<GalleryItem> getCREATOR() {
         return CREATOR;
     }
+
 }
 

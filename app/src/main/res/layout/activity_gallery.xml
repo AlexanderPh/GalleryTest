@@ -11,8 +11,9 @@
     android:id="@+id/recyclerview_gallery"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbarSize="3dp"
     android:visibility="visible"
+    android:scrollbars="vertical"
+    android:scrollbarSize="5dp"
     >
 </android.support.v7.widget.RecyclerView>
 </FrameLayout>
