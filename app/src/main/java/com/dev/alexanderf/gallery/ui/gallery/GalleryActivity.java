@@ -14,6 +14,7 @@ import com.dev.alexanderf.gallery.ui.gallery.utils.LoadHelper;
 import java.util.ArrayList;
 
 public class GalleryActivity extends AppCompatActivity {
+
     private static final String RECYCLERVIEW_STATE_KEY = "recyclerview_state";
     private Parcelable recycleViewState;
 
@@ -22,10 +23,8 @@ public class GalleryActivity extends AppCompatActivity {
     private GridLayoutManager gridLayoutManager;
 
     private LoadHelper loadHelper;
-
-
-
-
+    private boolean isLoading = false;
+    private boolean fromBundle = false;
 
 
     @Override
@@ -34,24 +33,28 @@ public class GalleryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gallery);
 
         initUI();
-
         loadHelper = LoadHelper.getInstance();
-        loadHelper.onRestoreInstanceState(savedInstanceState);
+
         if (savedInstanceState != null && savedInstanceState.containsKey(RECYCLERVIEW_STATE_KEY)){
             recycleViewState = savedInstanceState.getParcelable(RECYCLERVIEW_STATE_KEY);
         }
+        if (savedInstanceState != null){
+            galleryAdapter.onRestoreInstanceState(savedInstanceState);
+            fromBundle = true;
+        }
 
-        startLoad();
-
-
-
+        if (!fromBundle) {
+            loadHelper.loadItems(this);
+            isLoading = true;
+        }
     }
 
     private void startLoad() {
         if (loadHelper.isEndIsReached()){
             return;
         }
-        galleryAdapter.addLoadView();
+        isLoading = true;
+        galleryAdapter.setIsLoading();
         loadHelper.loadItems(this);
     }
 
@@ -74,7 +77,7 @@ public class GalleryActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (isFinishing()) {
+                if (isFinishing() || isLoading) {
                     return;
                 }
                 int firstVisiblePosition;
@@ -87,16 +90,17 @@ public class GalleryActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 
     public void loadItems(ArrayList<GalleryItem> galleryItems) {
-        galleryAdapter.removeLoadView();
+        galleryAdapter.setLoadingIsFinished();
+        isLoading = false;
+
         if (galleryItems != null){
             galleryAdapter.addItems(galleryItems);
-            if (galleryItems.size() < LoadHelper.LOAD_LIMIT)
+            if (galleryItems.size() < LoadHelper.LOAD_LIMIT){
+                loadHelper.setEndIsReached();
+            }
             if (recycleViewState != null){
                 recyclerView.getLayoutManager().onRestoreInstanceState(recycleViewState);
                 recycleViewState = null;
@@ -108,14 +112,14 @@ public class GalleryActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (loadHelper != null){
-            loadHelper.onSaveInstanceState(outState);
-        }
         if(recyclerView != null) {
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
             if(layoutManager != null) {
                 outState.putParcelable(RECYCLERVIEW_STATE_KEY, layoutManager.onSaveInstanceState());
             }
+        }
+        if (galleryAdapter != null){
+            galleryAdapter.onSaveInstanceState(outState);
         }
 
     }
@@ -127,16 +131,15 @@ public class GalleryActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (loadHelper != null){
-            loadHelper.onDestroy();
-            loadHelper = null;
-        }
-
         if (recyclerView != null) {
             recyclerView.setAdapter(null);
             recycleViewState = null;
         }
         galleryAdapter = null;
+
+        if (loadHelper != null){
+            loadHelper.onDestroy();
+        }
         super.onDestroy();
     }
 }

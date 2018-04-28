@@ -1,6 +1,5 @@
 package com.dev.alexanderf.gallery.api;
 
-import com.dev.alexanderf.gallery.model.ResourceList;
 import com.google.gson.annotations.SerializedName;
 
 /**

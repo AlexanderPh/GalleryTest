@@ -1,8 +1,8 @@
 package com.dev.alexanderf.gallery.ui.gallery.recyclerview;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,61 +19,17 @@ import java.util.ArrayList;
  */
 public class GalleryAdapter extends RecyclerView.Adapter {
 
+    private static final String BUNDLE_KEY_ITEMS = "items_key";
+
     private Context context;
-    private SortedList<GalleryItem> items;
+    private ArrayList<GalleryItem> items;
     private static final int DEFAULT_ITEM = 1;
     private static final int LOADING_ITEM = 0;
-    private GalleryItem loadingItem;
-
-    private int loadingViewPosition;
 
 
     public GalleryAdapter(Context context) {
         this.context = context;
-        this.loadingItem = new GalleryItem(GalleryItem.ItemType.loadingType);
-
-        items = new SortedList<>(GalleryItem.class, new SortedList.Callback<GalleryItem>() {
-            @Override
-            public int compare(GalleryItem o1, GalleryItem o2) {
-                return Integer.compare(o2.getItemType().ordinal(), o1.getItemType().ordinal());
-            }
-
-            @Override
-            public void onChanged(int position, int count) {
-
-            }
-
-            @Override
-            public boolean areContentsTheSame(GalleryItem oldItem, GalleryItem newItem) {
-                items.remove(oldItem);
-                return true;
-            }
-
-            @Override
-            public boolean areItemsTheSame(GalleryItem item1, GalleryItem item2) {
-                if (item1.getItemType() == GalleryItem.ItemType.loadingType){
-                    items.remove(item2);
-                    return false;
-                }
-                return false;
-            }
-
-            @Override
-            public void onInserted(int position, int count) {
-                notifyItemRangeInserted(position, count);
-            }
-
-            @Override
-            public void onRemoved(int position, int count) {
-               notifyItemRemoved(position);
-              //  notifyItemRangeRemoved(position, count);
-            }
-
-            @Override
-            public void onMoved(int fromPosition, int toPosition) {
-                notifyItemMoved(fromPosition, toPosition);
-            }
-        });
+        this.items = new  ArrayList<>();
 
     }
 
@@ -81,19 +37,19 @@ public class GalleryAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if (viewType == DEFAULT_ITEM) {
-            view = LayoutInflater.from(context).inflate(R.layout.gallery_item_image, parent, false);
-            return new ImageHolder(view);
-        } else {
+        if (viewType == LOADING_ITEM) {
             view = LayoutInflater.from(context).inflate(R.layout.gallery_item_load, parent, false);
             return new LoadHolder(view);
+        } else {
+            view = LayoutInflater.from(context).inflate(R.layout.gallery_item_image, parent, false);
+            return new ImageHolder(view);
         }
 
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (items.get(position).getItemType() == GalleryItem.ItemType.defaultType){
+        if (items.get(position) != null){
             final ImageHolder imageHolder = (ImageHolder) holder;
             imageHolder.setImage(items.get(holder.getAdapterPosition()).getFile(), context);
             imageHolder.mainLayout.setOnClickListener(new View.OnClickListener() {
@@ -114,44 +70,50 @@ public class GalleryAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return items.get(position).getItemType() == GalleryItem.ItemType.loadingType ? LOADING_ITEM : DEFAULT_ITEM;
+        return items.get(position) == null ? LOADING_ITEM : DEFAULT_ITEM;
     }
 
-    public void addItems(ArrayList<GalleryItem> newItems){
+    public void addItems(ArrayList<GalleryItem> newItems){ // Добавление нового сета картинок после загузки по скроллу
+        int itemRange = items.size();
         if (newItems != null){
-            items.beginBatchedUpdates();
             items.addAll(newItems);
-            items.endBatchedUpdates();
+            notifyItemRangeInserted(itemRange, newItems.size());
         }
     }
 
     public boolean isHeader(int position) {
-        return items.get(position).getItemType() == GalleryItem.ItemType.loadingType;
-    }
-
-    public void addLoadView() {
-
-        if (items.size() == 0) {
-            loadingViewPosition = items.size();
-        } else {
-            loadingViewPosition = items.size()-1;
-        }
-        items.beginBatchedUpdates();
-        items.add(loadingItem);
-        items.endBatchedUpdates();
-
-
-    }
-
-    public void removeLoadView(){
-            items.beginBatchedUpdates();
-            items.removeItemAt(loadingViewPosition);
-            items.endBatchedUpdates();
-
-    }
-
-    public boolean isNullItem(int position) {
-
         return items.get(position) == null;
+    }
+
+    public void setIsLoading(){ //Добавленеи view с прогрессбаром на время загрузки по скроллу
+        items.add(null);
+        try {
+            notifyItemInserted(items.size() - 1);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setLoadingIsFinished(){ //Удаление view с прогрессбаром после загрузки по скроллу
+        if (!items.isEmpty()) {
+            try {
+                items.remove(items.size() - 1);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            notifyItemRemoved(items.size());
+        }
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        if (outState != null){
+            outState.putParcelableArrayList(BUNDLE_KEY_ITEMS, items);
+        }
+
+    }
+    public void onRestoreInstanceState(Bundle onSavedInstanceSave){
+        if (onSavedInstanceSave != null && onSavedInstanceSave.containsKey(BUNDLE_KEY_ITEMS)){
+            items.addAll(onSavedInstanceSave.<GalleryItem>getParcelableArrayList(BUNDLE_KEY_ITEMS));
+        }
     }
 }
