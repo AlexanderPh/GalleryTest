@@ -14,11 +14,11 @@ import com.dev.alexanderf.gallery.R;
  * Created by AF.
  */
 public class ImageHolder extends RecyclerView.ViewHolder {
-    public ImageView imageView;
+    private ImageView imageView;
     public View mainLayout;
 
 
-    public ImageHolder(View itemView) {
+    ImageHolder(View itemView) {
         super(itemView);
         imageView = itemView.findViewById(R.id.item_image);
         mainLayout = itemView.findViewById(R.id.item_layout);

@@ -8,6 +8,11 @@ import android.os.Parcelable;
  */
 public class GalleryItem implements Parcelable {
 
+    public enum ItemType {
+        loadingType,
+        defaultType
+    }
+
     private String name;
     private String preview;
     private String file;
@@ -19,8 +24,18 @@ public class GalleryItem implements Parcelable {
     private String mime_type;
     private String media_type;
     private long size;
+    private ItemType itemType;
+
 
     public GalleryItem() {
+        itemType = ItemType.defaultType;
+    }
+
+    public GalleryItem(ItemType itemType) {
+        this.itemType = itemType;
+        this.name = "loadingType";
+        this.preview = "loadingType";
+        this.created = "loadingType";
     }
 
     public GalleryItem(String name, String preview, String file, String created, String modified, String path, String md5, String type, String mime_type, String media_type, long size) {
@@ -174,6 +189,14 @@ public class GalleryItem implements Parcelable {
 
     public static Creator<GalleryItem> getCREATOR() {
         return CREATOR;
+    }
+
+    public ItemType getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(ItemType itemType) {
+        this.itemType = itemType;
     }
 }
 

@@ -41,9 +41,18 @@ public class GalleryActivity extends AppCompatActivity {
             recycleViewState = savedInstanceState.getParcelable(RECYCLERVIEW_STATE_KEY);
         }
 
+        startLoad();
+
+
+
+    }
+
+    private void startLoad() {
+        if (loadHelper.isEndIsReached()){
+            return;
+        }
+        galleryAdapter.addLoadView();
         loadHelper.loadItems(this);
-
-
     }
 
     private void initUI() {
@@ -54,6 +63,12 @@ public class GalleryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
 
 
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return galleryAdapter.isHeader(position) ? gridLayoutManager.getSpanCount() : 1;
+            }
+        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -67,20 +82,21 @@ public class GalleryActivity extends AppCompatActivity {
                     firstVisiblePosition = gridLayoutManager.findLastCompletelyVisibleItemPosition();
                     int fullItemCount = galleryAdapter.getItemCount();
                     if ((firstVisiblePosition) >= fullItemCount - 1) {
-                        loadHelper.loadItems(GalleryActivity.this);
+                        startLoad();
                     }
                 }
             }
         });
 
+
+
     }
 
     public void loadItems(ArrayList<GalleryItem> galleryItems) {
+        galleryAdapter.removeLoadView();
         if (galleryItems != null){
             galleryAdapter.addItems(galleryItems);
-            if (galleryItems.size() < LoadHelper.LOAD_LIMIT){
-                loadHelper.setEndIsReached();
-            }
+            if (galleryItems.size() < LoadHelper.LOAD_LIMIT)
             if (recycleViewState != null){
                 recyclerView.getLayoutManager().onRestoreInstanceState(recycleViewState);
                 recycleViewState = null;

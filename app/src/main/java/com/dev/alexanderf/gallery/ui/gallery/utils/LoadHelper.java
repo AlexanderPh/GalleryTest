@@ -70,6 +70,10 @@ public class LoadHelper {
         endIsReached = true;
     }
 
+    public boolean isEndIsReached() {
+        return endIsReached;
+    }
+
     public void onSaveInstanceState(Bundle outState) {
         if (outState != null) {
             outState.putInt(BUNDLE_KEY_PAGE, page);
