@@ -8,6 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
     <style name="FullImageToolbarTransparentBlack">
         <item name="android:background">#b4000000</item>
         <item name="android:layout_width">match_parent</item>
@@ -16,7 +23,7 @@
 
 
 
-    <style name="TransparentActionBarNoTitle" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="TransparentActionBarNoTitle" parent="AppTheme.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>

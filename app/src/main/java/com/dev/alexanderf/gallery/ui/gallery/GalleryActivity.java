@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.dev.alexanderf.gallery.R;
 import com.dev.alexanderf.gallery.model.GalleryItem;
@@ -20,6 +22,7 @@ public class GalleryActivity extends AppCompatActivity {
     private Parcelable recycleViewState;
 
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
     private GalleryAdapter galleryAdapter;
     private GridLayoutManager gridLayoutManager;
 
@@ -47,6 +50,8 @@ public class GalleryActivity extends AppCompatActivity {
         if (!fromBundle) {
             loadHelper.loadItems(this);
             isLoading = true;
+        } else {
+            showLayout();
         }
     }
 
@@ -61,6 +66,7 @@ public class GalleryActivity extends AppCompatActivity {
 
     private void initUI() {
         recyclerView = findViewById(R.id.recyclerview_gallery);
+        progressBar = findViewById(R.id.progress_bar);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             gridLayoutManager = new GridLayoutManager(this, 5);
         }else {
@@ -98,9 +104,12 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     public void loadItems(ArrayList<GalleryItem> galleryItems) {
+        if (galleryAdapter.getItemCount() == 0){
+            showLayout();
+        }
+
         galleryAdapter.setLoadingIsFinished();
         isLoading = false;
-
         if (galleryItems != null){
             galleryAdapter.addItems(galleryItems);
             if (galleryItems.size() < LoadHelper.LOAD_LIMIT){
@@ -112,6 +121,11 @@ public class GalleryActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void showLayout() {
+        progressBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override

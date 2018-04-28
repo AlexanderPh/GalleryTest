@@ -7,13 +7,24 @@
     android:background="@color/colorBackground"
     >
 
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/recyclerview_gallery"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:visibility="visible"
-    android:scrollbars="vertical"
-    android:scrollbarSize="5dp"
-    >
-</android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:scrollbars="vertical"
+        android:scrollbarSize="5dp"
+
+        >
+    </android.support.v7.widget.RecyclerView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:background="@drawable/white_circle"
+        android:padding="2dp"
+        />
 </FrameLayout>

@@ -14,7 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:background="@drawable/white_circle"
+        />
 
     <com.alexvasilkov.gestures.views.GestureImageView
         android:id="@+id/fullImage"
@@ -35,7 +37,6 @@
             android:visibility="visible"
             />
 
-        
         <ImageView
             android:textColor="#FFFFFF"
             android:id="@+id/button_save"
