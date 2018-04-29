@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -40,9 +43,8 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
 
     private GestureImageView fullImage;
     private ProgressBar progressBar;
-    private View toolbar;
+    private Toolbar toolbar;
     private View buttonSave;
-    private View buttonBack;
 
     private GalleryItem galleryItem;
     private Drawable drawable = null;
@@ -73,24 +75,41 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void initUI() {
         fullImage = findViewById(R.id.fullImage);
         toolbar = findViewById(R.id.toolbar);
+
         progressBar = findViewById(R.id.fireFullImageProgress);
 
+        if (galleryItem != null){
+            toolbar.setTitle(galleryItem.getName());
+        }
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+
+        }
+
         buttonSave = findViewById(R.id.button_save);
-        buttonBack = findViewById(R.id.button_back);
 
         fullImage.setOnClickListener(this);
-        buttonBack.setOnClickListener(this);
         buttonSave.setOnClickListener(this);
 
         RequestOptions options = new RequestOptions()
                 .priority(Priority.HIGH)
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .skipMemoryCache(true);
-
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
         Glide.with(this)
                 .load(galleryItem.getFile())
                 .apply(options)
@@ -104,9 +123,6 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
         switch (view.getId()){
             case R.id.button_save:
                 onSaveButtonClick();
-                break;
-            case R.id.button_back:
-                onBackPressed();
                 break;
             case R.id.fullImage:
                 showHideToolbar();
@@ -138,7 +154,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
     private void saveDrawableToGallery() {
         Bitmap bitmap = BitmapUtils.drawableToBitmap(drawable);
         BitmapUtils.saveBitmapToGallery(bitmap);
-    //    Toast.makeText(this, R.string.title_image_saved, Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(this, R.string.title_image_saved, Toast.LENGTH_SHORT).show();
     }
 
     private boolean checkWriteExternalPermission()
@@ -169,7 +185,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
             progressBar.setVisibility(View.GONE);
         }
         if (e != null) {
-          e.printStackTrace();
+            e.printStackTrace();
         }
         return true;
     }
