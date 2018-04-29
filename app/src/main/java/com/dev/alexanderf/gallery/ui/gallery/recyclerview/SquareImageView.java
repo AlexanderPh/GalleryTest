@@ -9,6 +9,7 @@ import android.widget.ImageView;
  * Created by AF.
  */
 public class SquareImageView extends android.support.v7.widget.AppCompatImageView {
+
     public SquareImageView(Context context) {
         super(context);
     }
@@ -21,6 +22,8 @@ public class SquareImageView extends android.support.v7.widget.AppCompatImageVie
         super(context, attrs, defStyleAttr);
     }
 
+
+    //percentrelativelayout is deprecated, в onMeasure перезадаются размеры для квадратной View галереи
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

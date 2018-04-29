@@ -9,6 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
+import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.dev.alexanderf.gallery.R;
 import com.dev.alexanderf.gallery.model.GalleryItem;
 import com.dev.alexanderf.gallery.ui.gallery.recyclerview.GalleryAdapter;
@@ -25,6 +28,8 @@ public class GalleryActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private GalleryAdapter galleryAdapter;
     private GridLayoutManager gridLayoutManager;
+    private ViewPreloadSizeProvider viewPreloadSizeProvider;
+    private RecyclerViewPreloader recyclerViewPreloader;
 
     private LoadHelper loadHelper;
     private boolean isLoading = false;
@@ -66,6 +71,9 @@ public class GalleryActivity extends AppCompatActivity {
 
     private void initUI() {
         recyclerView = findViewById(R.id.recyclerview_gallery);
+
+
+
         progressBar = findViewById(R.id.progress_bar);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             gridLayoutManager = new GridLayoutManager(this, 5);
@@ -75,7 +83,9 @@ public class GalleryActivity extends AppCompatActivity {
         galleryAdapter = new GalleryAdapter(this);
         recyclerView.setAdapter(galleryAdapter);
         recyclerView.setLayoutManager(gridLayoutManager);
-
+        viewPreloadSizeProvider = new ViewPreloadSizeProvider(); // //реализация предзагрузки изображений в RecyclerView через Glide
+        recyclerViewPreloader = new RecyclerViewPreloader(Glide.with(this), galleryAdapter, viewPreloadSizeProvider, 20 );
+        recyclerView.addOnScrollListener(recyclerViewPreloader);
 
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
