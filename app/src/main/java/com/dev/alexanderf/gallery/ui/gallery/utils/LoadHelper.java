@@ -3,6 +3,7 @@ package com.dev.alexanderf.gallery.ui.gallery.utils;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.dev.alexanderf.gallery.R;
 import com.dev.alexanderf.gallery.ui.gallery.GalleryActivity;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -49,7 +50,7 @@ public class LoadHelper {
             task = new LoadPublicResourcesTask(activity, offset, LOAD_LIMIT);
             task.executeOnExecutor(executor);
         } else {
-            Toast.makeText(activity, "End is reached", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.toast_all_loaded, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -64,6 +65,11 @@ public class LoadHelper {
 
     public void upPage() {
         page++;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+        endIsReached = false;
     }
 
 

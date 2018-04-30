@@ -57,6 +57,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         if (!fromBundle) {
+            loadHelper.setPage(0);
             loadHelper.loadItems(this);
             isLoading = true;
         } else {
@@ -182,6 +183,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         if (loadHelper != null){
             loadHelper.onDestroy();
+            loadHelper = null;
         }
         super.onDestroy();
     }
@@ -201,6 +203,4 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
             loadHelper.loadItems(this);
         }
     }
-
-
 }

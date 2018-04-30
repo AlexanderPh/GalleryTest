@@ -183,7 +183,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
     private void saveDrawableToGallery() {
         Bitmap bitmap = BitmapUtils.drawableToBitmap(drawable);
         BitmapUtils.saveBitmapToGallery(bitmap);
-        Toast.makeText(this, R.string.title_image_saved, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.toast_image_saved, Toast.LENGTH_SHORT).show();
     }
 
     private boolean checkWriteExternalPermission()
