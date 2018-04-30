@@ -15,7 +15,6 @@
         android:scrollbarSize="5dp"
         >
     </android.support.v7.widget.RecyclerView>
-
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
@@ -25,7 +24,6 @@
         android:background="@drawable/white_circle"
         android:padding="2dp"
         />
-
     <FrameLayout
         android:id="@+id/error_view"
         android:layout_width="match_parent"
@@ -45,6 +43,7 @@
                 android:text="@string/error_message"
                 android:layout_gravity="center_horizontal"
                 android:textAppearance="@style/InfoTitleAppearance"
+                android:layout_marginBottom="8dp"
                 />
             <Button
                 android:id="@+id/try_again"

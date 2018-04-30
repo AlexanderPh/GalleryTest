@@ -7,6 +7,6 @@
     <string name="info_title_size">Size:</string>
     <string name="info_title_created">Created:</string>
     <string name="info_dialog_close">CLOSE</string>
-    <string name="error_message">Connection error, please try again later</string>
+    <string name="error_message">Connection error, please try again later.</string>
     <string name="error_button_try_again">Try again</string>
 </resources>
