@@ -17,7 +17,7 @@ import retrofit2.Response;
 /**
  * Created by AF.
  */
-public class LoadPublicResourcesTask extends AsyncTask<Void, Void, ArrayList<GalleryItem>> {
+class LoadPublicResourcesTask extends AsyncTask<Void, Void, ArrayList<GalleryItem>> {
 
     private WeakReference<GalleryActivity> reference;
     private Integer offset = null;

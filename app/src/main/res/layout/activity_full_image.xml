@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout
     android:id="@+id/llFireRootContainer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -8,7 +8,6 @@
     android:focusableInTouchMode="true"
     android:background="@color/colorPrimaryDark"
     >
-
     <ProgressBar
         android:id="@+id/fireFullImageProgress"
         android:layout_width="wrap_content"
@@ -28,18 +27,5 @@
         android:id="@+id/toolbar"
         style="@style/FullImageToolbarTransparentBlack"
         android:visibility="visible">
-
-        <ImageView
-            android:textColor="#FFFFFF"
-            android:id="@+id/button_save"
-            android:layout_marginEnd="24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="end"
-            app:srcCompat="@drawable/ic_file_download_white"
-            />
     </android.support.v7.widget.Toolbar>
-
 </FrameLayout>

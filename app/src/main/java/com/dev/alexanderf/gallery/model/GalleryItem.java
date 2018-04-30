@@ -39,7 +39,7 @@ public class GalleryItem implements Parcelable {
         this.size = size;
     }
 
-    protected GalleryItem(Parcel in) {
+    private GalleryItem(Parcel in) {
         name = in.readString();
         preview = in.readString();
         file = in.readString();

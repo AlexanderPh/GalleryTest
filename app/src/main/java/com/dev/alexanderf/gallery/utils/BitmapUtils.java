@@ -28,7 +28,8 @@ import java.util.Date;
  */
 public class BitmapUtils {
 
-    public static Bitmap drawableToBitmap(Drawable drawable, int width, int height) {
+    //копипаста с рабочего прокта для работы с битмапами
+    private static Bitmap drawableToBitmap(Drawable drawable, int width, int height) {
         if (drawable == null) {
             return null;
         } else if (drawable instanceof BitmapDrawable) {
@@ -42,7 +43,6 @@ public class BitmapUtils {
             return null;
 
         try {
-            // Create Bitmap object out of the drawable
             Bitmap bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
             drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -50,8 +50,6 @@ public class BitmapUtils {
             return bitmap;
         } catch (OutOfMemoryError e) {
             e.printStackTrace();
-            // Simply return null of failed bitmap creations
-            //Log.e(getClass().toString(), "Encountered OutOfMemoryError while generating bitmap!");
             return null;
         }
     }
@@ -88,7 +86,7 @@ public class BitmapUtils {
         }
     }
 
-    public static void galleryAddPic(String path, Context context) {
+    private static void galleryAddPic(String path, Context context) {
         ContentValues values = new ContentValues();
 
         values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());

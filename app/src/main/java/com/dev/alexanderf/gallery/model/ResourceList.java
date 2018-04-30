@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by AF.
  */
-public class ResourceList {
+class ResourceList {
 
     @SerializedName("items")
     private ArrayList<GalleryItem> data;

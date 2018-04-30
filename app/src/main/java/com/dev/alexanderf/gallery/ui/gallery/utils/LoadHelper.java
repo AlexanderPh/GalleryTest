@@ -1,6 +1,5 @@
 package com.dev.alexanderf.gallery.ui.gallery.utils;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
@@ -49,11 +48,9 @@ public class LoadHelper {
             int offset = page * LOAD_LIMIT;
             task = new LoadPublicResourcesTask(activity, offset, LOAD_LIMIT);
             task.executeOnExecutor(executor);
-            page++;
         } else {
             Toast.makeText(activity, "End is reached", Toast.LENGTH_SHORT).show();
         }
-
 
     }
 
@@ -65,6 +62,9 @@ public class LoadHelper {
         return endIsReached;
     }
 
+    public void upPage() {
+        page++;
+    }
 
 
     private static class LoadExecutor extends ThreadPoolExecutor {
@@ -78,7 +78,6 @@ public class LoadHelper {
             allowCoreThreadTimeOut(true);
         }
     }
-
 
     public void onDestroy(){
         if (task != null){

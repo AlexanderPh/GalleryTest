@@ -39,7 +39,7 @@ public class YandexAPI {
     private static Cache cache = null;
     private static API api;
 
-    public static class ApiCacheInterceptor implements Interceptor {
+    static class ApiCacheInterceptor implements Interceptor {
 
         @Override
         public Response intercept(@NonNull Chain chain) throws IOException {

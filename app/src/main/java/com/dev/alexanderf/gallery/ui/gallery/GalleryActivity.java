@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
@@ -19,7 +21,7 @@ import com.dev.alexanderf.gallery.ui.gallery.utils.LoadHelper;
 
 import java.util.ArrayList;
 
-public class GalleryActivity extends AppCompatActivity {
+public class GalleryActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String RECYCLERVIEW_STATE_KEY = "recyclerview_state";
     private Parcelable recycleViewState;
@@ -30,6 +32,8 @@ public class GalleryActivity extends AppCompatActivity {
     private GridLayoutManager gridLayoutManager;
     private ViewPreloadSizeProvider viewPreloadSizeProvider;
     private RecyclerViewPreloader recyclerViewPreloader;
+    private FrameLayout errorview;
+    private Button tryAgainButton;
 
     private LoadHelper loadHelper;
     private boolean isLoading = false;
@@ -56,7 +60,7 @@ public class GalleryActivity extends AppCompatActivity {
             loadHelper.loadItems(this);
             isLoading = true;
         } else {
-            showLayout();
+            showGalleryLayout();
         }
     }
 
@@ -66,20 +70,23 @@ public class GalleryActivity extends AppCompatActivity {
         }
         isLoading = true;
         galleryAdapter.setIsLoading();
+        recyclerView.scrollToPosition(galleryAdapter.getItemCount() - 1);
         loadHelper.loadItems(this);
     }
 
     private void initUI() {
         recyclerView = findViewById(R.id.recyclerview_gallery);
-
-
-
         progressBar = findViewById(R.id.progress_bar);
+        errorview = findViewById(R.id.error_view);
+        tryAgainButton = findViewById(R.id.try_again);
+        tryAgainButton.setOnClickListener(this);
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             gridLayoutManager = new GridLayoutManager(this, 5);
         }else {
             gridLayoutManager = new GridLayoutManager(this, 3);
         }
+
         galleryAdapter = new GalleryAdapter(this);
         recyclerView.setAdapter(galleryAdapter);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -103,10 +110,11 @@ public class GalleryActivity extends AppCompatActivity {
                 }
                 int firstVisiblePosition;
                 if (dy > 0) {
-                    firstVisiblePosition = gridLayoutManager.findLastCompletelyVisibleItemPosition();
+                    firstVisiblePosition = gridLayoutManager.findLastVisibleItemPosition();
                     int fullItemCount = galleryAdapter.getItemCount();
                     if ((firstVisiblePosition) >= fullItemCount - 1) {
                         startLoad();
+
                     }
                 }
             }
@@ -114,26 +122,32 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     public void loadItems(ArrayList<GalleryItem> galleryItems) {
-        if (galleryAdapter.getItemCount() == 0){
-            showLayout();
+        if (galleryItems == null){
+            showErrorView();
+            return;
         }
-
+        if (galleryAdapter.getItemCount() == 0){
+            showGalleryLayout();
+        }
         galleryAdapter.setLoadingIsFinished();
         isLoading = false;
-        if (galleryItems != null){
-            galleryAdapter.addItems(galleryItems);
-            if (galleryItems.size() < LoadHelper.LOAD_LIMIT){
-                loadHelper.setEndIsReached();
-            }
-            if (recycleViewState != null){
-                recyclerView.getLayoutManager().onRestoreInstanceState(recycleViewState);
-                recycleViewState = null;
-            }
+        galleryAdapter.addItems(galleryItems);
+        if (galleryItems.size() < LoadHelper.LOAD_LIMIT){
+            loadHelper.setEndIsReached();
+        } else {
+            loadHelper.upPage();
         }
-
+        if (recycleViewState != null){
+            recyclerView.getLayoutManager().onRestoreInstanceState(recycleViewState);
+            recycleViewState = null;
+        }
     }
 
-    private void showLayout() {
+    private void showErrorView() {
+        errorview.setVisibility(View.VISIBLE);
+    }
+
+    private void showGalleryLayout() {
         progressBar.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
     }
@@ -171,4 +185,22 @@ public class GalleryActivity extends AppCompatActivity {
         }
         super.onDestroy();
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.try_again:
+                reload();
+                break;
+        }
+    }
+
+    private void reload() {
+        if (loadHelper != null){
+            errorview.setVisibility(View.GONE);
+            loadHelper.loadItems(this);
+        }
+    }
+
+
 }
