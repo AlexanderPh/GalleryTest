@@ -24,7 +24,6 @@
         android:background="@color/colorPrimary"
         />
     <TextView
-        android:id="@+id/title_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/InfoTextViewStyle"
@@ -40,7 +39,6 @@
         android:textAppearance="@style/InfoTextAppearance"
         />
     <TextView
-        android:id="@+id/title_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/InfoTextViewStyle"
@@ -55,7 +53,6 @@
         android:textAppearance="@style/InfoTextAppearance"
         />
     <TextView
-        android:id="@+id/title_created"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/InfoTextViewStyle"

@@ -5,9 +5,10 @@
     <string name="toast_image_saved">Image saved!</string>
     <string name="info_title_name">Name:</string>
     <string name="info_title_size">Size:</string>
+    <string name="info_text_size">%d Kbyte</string>
     <string name="info_title_created">Created:</string>
     <string name="info_dialog_close">CLOSE</string>
     <string name="error_message">Connection error, please try again later.</string>
     <string name="error_button_try_again">Try again</string>
-    <string name="toast_all_loaded">End is reached</string>
+    <string name="toast_all_loaded">Nothing to load</string>
 </resources>

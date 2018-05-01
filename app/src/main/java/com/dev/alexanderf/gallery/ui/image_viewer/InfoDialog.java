@@ -20,7 +20,6 @@ import com.dev.alexanderf.gallery.model.GalleryItem;
 public class InfoDialog extends DialogFragment implements View.OnClickListener {
 
     private GalleryItem item;
-    private Button closeButton;
     private TextView name;
     private TextView size;
     private TextView created;
@@ -66,7 +65,7 @@ public class InfoDialog extends DialogFragment implements View.OnClickListener {
     }
 
     private void initUI(View view) {
-        closeButton = view.findViewById(R.id.close);
+        Button closeButton = view.findViewById(R.id.close);
         closeButton.setOnClickListener(this);
 
         name = view.findViewById(R.id.name);
@@ -79,10 +78,14 @@ public class InfoDialog extends DialogFragment implements View.OnClickListener {
     }
 
     private void setUpUi() {
+        if (getActivity() == null || getContext() == null || getActivity().isFinishing() ){
+            return;
+        }
+
         if (item.getName() != null){
             name.setText(item.getName());
         }
-            size.setText(Long.toString(item.getSize()/1024)+ "Kb");
+        size.setText(String.format(getContext().getString(R.string.info_text_size),  item.getSize()/1024));
 
         if (item.getCreated() != null){
             created.setText(item.getCreated().substring(0,10));

@@ -30,10 +30,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     private ProgressBar progressBar;
     private GalleryAdapter galleryAdapter;
     private GridLayoutManager gridLayoutManager;
-    private ViewPreloadSizeProvider viewPreloadSizeProvider;
-    private RecyclerViewPreloader recyclerViewPreloader;
     private FrameLayout errorview;
-    private Button tryAgainButton;
 
     private LoadHelper loadHelper;
     private boolean isLoading = false;
@@ -79,7 +76,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView = findViewById(R.id.recyclerview_gallery);
         progressBar = findViewById(R.id.progress_bar);
         errorview = findViewById(R.id.error_view);
-        tryAgainButton = findViewById(R.id.try_again);
+        Button tryAgainButton = findViewById(R.id.try_again);
         tryAgainButton.setOnClickListener(this);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -91,8 +88,8 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         galleryAdapter = new GalleryAdapter(this);
         recyclerView.setAdapter(galleryAdapter);
         recyclerView.setLayoutManager(gridLayoutManager);
-        viewPreloadSizeProvider = new ViewPreloadSizeProvider(); // //реализация предзагрузки изображений в RecyclerView через Glide
-        recyclerViewPreloader = new RecyclerViewPreloader(Glide.with(this), galleryAdapter, viewPreloadSizeProvider, 20 );
+        ViewPreloadSizeProvider viewPreloadSizeProvider = new ViewPreloadSizeProvider();
+        RecyclerViewPreloader recyclerViewPreloader = new RecyclerViewPreloader(Glide.with(this), galleryAdapter, viewPreloadSizeProvider, 20);
         recyclerView.addOnScrollListener(recyclerViewPreloader);
 
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -166,11 +163,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
             galleryAdapter.onSaveInstanceState(outState);
         }
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

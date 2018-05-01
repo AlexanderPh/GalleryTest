@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Галерея</string>
+    <string name="information">ИНФОРМАЦИЯ</string>
+    <string name="save">СОХРАНИТЬ</string>
+    <string name="toast_image_saved">Изображение сохранено!</string>
+    <string name="info_title_name">Имя:</string>
+    <string name="info_title_size">Размер:</string>
+    <string name="info_text_size">%d Кбайт</string>
+    <string name="info_title_created">Создано:</string>
+    <string name="info_dialog_close">ЗАКРЫТЬ</string>
+    <string name="error_message">Ошибка соединения, пожалуйста, повторите попытку позже.</string>
+    <string name="error_button_try_again">Повторить</string>
+    <string name="toast_all_loaded">Больше нечего скачать</string>
+</resources>

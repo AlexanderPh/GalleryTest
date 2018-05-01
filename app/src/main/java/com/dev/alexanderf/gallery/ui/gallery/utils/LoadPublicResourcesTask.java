@@ -19,9 +19,9 @@ import retrofit2.Response;
  */
 class LoadPublicResourcesTask extends AsyncTask<Void, Void, ArrayList<GalleryItem>> {
 
-    private WeakReference<GalleryActivity> reference;
+    private final WeakReference<GalleryActivity> reference;
     private Integer offset = null;
-    private Integer loadLimit;
+    private final Integer loadLimit;
 
     public LoadPublicResourcesTask(GalleryActivity activity, int offset, int loadLimit) {
         this.reference = new WeakReference<>(activity);

@@ -174,9 +174,7 @@ public class GalleryItem implements Parcelable {
         this.size = size;
     }
 
-    public static Creator<GalleryItem> getCREATOR() {
-        return CREATOR;
-    }
+
 
 }
 

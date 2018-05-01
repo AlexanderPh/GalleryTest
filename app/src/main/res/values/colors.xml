@@ -3,14 +3,7 @@
 <color name="colorPrimary">#212121</color>
 <color name="colorPrimaryDark">#000000</color>
 <color name="colorBackground">#303030</color>
-<color name="cardBackground">#424242</color>
 
-<color name="colorSecondary">#ffffff</color>
-<color name="colorSecondaryLight">#ffffff</color>
-<color name="colorSecondaryDark">#cccccc</color>
+    <color name="colorAccent">#FFC107</color>
 
-<color name="colorAccent">#FFC107</color>
-
-<color name="primaryTextColor">#000000</color>
-<color name="secondaryTextColor">#000000</color>
 </resources>
